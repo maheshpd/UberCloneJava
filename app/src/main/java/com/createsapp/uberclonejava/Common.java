@@ -4,6 +4,7 @@ import com.createsapp.uberclonejava.Model.DriverInfoModel;
 
 public class Common {
     public static final String DRIVER_INFO_REFERENCE = "DriverInfo";
+    public static final String DRIVERS_LOCATION_REFERENCE = "DriversLocation";
 
     public static DriverInfoModel currentUser;
 }
