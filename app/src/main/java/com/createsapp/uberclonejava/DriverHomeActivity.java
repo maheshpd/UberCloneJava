@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -177,9 +178,9 @@ public class DriverHomeActivity extends AppCompatActivity {
                     AlertDialog dialog = builder.create();
                     dialog.setOnShowListener(dialogInterface -> {
                         dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-                                .setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+                                .setTextColor(ContextCompat.getColor(DriverHomeActivity.this, android.R.color.holo_red_dark));
                         dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-                                .setTextColor(getResources().getColor(R.color.colorAccent));
+                                .setTextColor(ContextCompat.getColor(DriverHomeActivity.this, R.color.colorAccent));
                     });
 
                     dialog.show();
@@ -190,11 +191,11 @@ public class DriverHomeActivity extends AppCompatActivity {
 
         //Set data for user
         View headerView = navigationView.getHeaderView(0);
-        TextView txt_name = (TextView) headerView.findViewById(R.id.txt_name);
-        TextView txt_phone = (TextView) headerView.findViewById(R.id.txt_phone);
-        TextView txt_star = (TextView) headerView.findViewById(R.id.txt_star);
+        TextView txt_name = headerView.findViewById(R.id.txt_name);
+        TextView txt_phone = headerView.findViewById(R.id.txt_phone);
+        TextView txt_star = headerView.findViewById(R.id.txt_star);
 
-        img_avatar = (ImageView) headerView.findViewById(R.id.img_avatar);
+        img_avatar = headerView.findViewById(R.id.img_avatar);
 
         txt_name.setText(Common.buildwelcomeMessage());
         txt_phone.setText(Common.currentUser != null ? Common.currentUser.getPhoneNumber() : "");
