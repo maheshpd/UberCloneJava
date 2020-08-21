@@ -58,6 +58,22 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private HomeViewModel homeViewModel;
 
     SupportMapFragment mapFragment;
+
+    ValueEventListener onlineValueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            if (snapshot.exists() && currentUserRef != null) {
+                currentUserRef.onDisconnect().removeValue();
+
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+            Snackbar.make(mapFragment.getView(), error.getMessage(), Snackbar.LENGTH_SHORT).show();
+        }
+    };
+
     //Location
     private FusedLocationProviderClient fusedLocationProviderClient;
     private LocationRequest locationRequest;
@@ -66,18 +82,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     //Online System
     DatabaseReference onlineRef, currentUserRef, driversLocationRef;
     GeoFire geofire;
-    ValueEventListener onlineValueEventListener = new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot snapshot) {
-            if (snapshot.exists() && currentUserRef != null)
-                currentUserRef.onDisconnect().removeValue();
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError error) {
-            Snackbar.make(mapFragment.getView(), error.getMessage(), Snackbar.LENGTH_SHORT).show();
-        }
-    };
+    private boolean isFirstTime = true;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -106,9 +111,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
 
         locationRequest = new LocationRequest();
-        locationRequest.setSmallestDisplacement(10f);
-        locationRequest.setInterval(5000);
-        locationRequest.setFastestInterval(3000);
+        locationRequest.setSmallestDisplacement(50f); //50m
+        locationRequest.setInterval(15000); // 15 sec
+        locationRequest.setFastestInterval(10000); // 10 sec
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         locationCallback = new LocationCallback() {
@@ -140,8 +145,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                             (key, error) -> {
                                 if (error != null)
                                     Snackbar.make(mapFragment.getView(), error.getMessage(), Snackbar.LENGTH_SHORT).show();
-                                else
-                                    Snackbar.make(mapFragment.getView(), "You're online", Snackbar.LENGTH_SHORT).show();
                             });
 
                     registerOnlineSystem();
@@ -222,6 +225,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             Log.e("EDMT_ERROR", e.getMessage());
         }
 
+        Snackbar.make(mapFragment.getView(), "You're online", Snackbar.LENGTH_SHORT).show();
 
     }
 
